@@ -12,22 +12,32 @@ connection = pika.BlockingConnection(
 channel = connection.channel()
 
 # Define queue
-queue_name = 'work_queues_1'
+queue_name = 'work_queues_durable' #não é possível redefinir uma fila existente
 
 # Create queue
-channel.queue_declare(queue=queue_name)
+channel.queue_declare(
+    queue=queue_name,
+    durable=True
+)
 
 # Create and publish messages
 for i in range (30):
 
     # Assemble message
     time_stamp = dt.datetime.strftime(dt.datetime.now(), format='%Y-%m-%d %H:%M:%S.%f')
-    message = f'Hello RabbitMQ {time_stamp} {i:6}'
+    
+    # NOVA TAREFA
+    message = f'{time_stamp} {i:6} {"."*random.randint(1,10)}'
 
     # Publish message
-    channel.basic_publish(exchange='',
-                        routing_key=queue_name,
-                        body=message)
+    channel.basic_publish(
+    exchange='',
+    routing_key=queue_name,
+    body=message,
+    properties=pika.BasicProperties(
+        delivery_mode=pika.spec.PERSISTENT_DELIVERY_MODE
+    )
+)
     # time.sleep(1)
 
     print(f" [x] Sent {message}")

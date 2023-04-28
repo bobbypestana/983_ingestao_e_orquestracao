@@ -9,33 +9,36 @@ def main():
     connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
     channel = connection.channel()
 
-    queue_name = 'work_queues_durable' #não é possível redefinir uma fila existente
-
     # Declare a queue to consume messages from
-    channel.queue_declare(
-    queue=queue_name,
-    durable=True
-)
+    result = channel.queue_declare(
+        queue='', 
+        exclusive=True
+    )
+
+    # Define exchange and queue name s
+    exchange_name = 'logs'
+    queue_name = result.method.queue
+
+    # Declare queue bindings
+    channel.queue_bind(
+        exchange=exchange_name,
+        queue=queue_name
+    )
 
     # Define a callback function to handle incoming messages
     def callback(ch, method, properties, body):
         print(f" [x] Received {body}")
 
         # Simulate work being done on the message by sleeping for an amount of time
-        time.sleep(body.count(b'.'))
-        
+        # time.sleep(body.count(b'.'))
 
-        
         print(" [x] Done")
 
-
-    # Set up a consumer to receive messages from the queue and pass them to the callback function
-    channel.basic_qos(prefetch_count=1)
 
     channel.basic_consume(
         queue=queue_name,
         on_message_callback=callback,
-        # auto_ack=True
+        auto_ack=True
     )
 
     # Start consuming messages from the queue

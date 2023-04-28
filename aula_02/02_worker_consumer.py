@@ -25,7 +25,7 @@ def main():
         time.sleep(body.count(b'.'))
         
 
-        
+        ch.basic_ack(delivery_tag = method.delivery_tag)
         print(" [x] Done")
 
 

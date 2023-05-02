@@ -26,8 +26,7 @@ def main():
     )
 
     # Declare queue bindings
-    severities = ['error', 'warning', 'info']
-    # severities = ['error'] # for errors only channel
+    severities = ['error']
     
     for severity in severities:
         channel.queue_bind(
@@ -35,17 +34,18 @@ def main():
             queue=queue_name,
             routing_key=severity
         )
-
+ 
     # Define a callback function to handle incoming messages
     def callback(ch, method, properties, body):
         print(f" [x] Received {body}")
         print(f"{method.routing_key}")
 
-        ## For error only channel 
-        # with open('logs/direct_log_errors.txt', 'a') as f:
-        #     f.write(f'{body} \n')
+        with open('logs/direct_log_errors.txt', 'a') as f:
+            f.write(f'{body} \n')
         
-        # print('[X] Done.')
+        print('[X] Done.')
+
+
 
 
     channel.basic_consume(

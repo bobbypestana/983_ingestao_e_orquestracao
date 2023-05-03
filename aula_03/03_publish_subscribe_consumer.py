@@ -47,6 +47,8 @@ def main():
         
         # print('[X] Done.')
 
+        time.sleep(2)
+
 
     channel.basic_consume(
         queue=queue_name,

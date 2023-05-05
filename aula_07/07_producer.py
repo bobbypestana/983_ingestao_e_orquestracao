@@ -9,7 +9,7 @@ producer = KafkaProducer(bootstrap_servers=['localhost:9092'])
 topic_ = 'my_topic'   
 
 # Cria uma mensagem
-for i in range (20):
+for i in range (10):
     # Captura a hora atual e converte em uma string formatada
     time_stamp = dt.datetime.strftime(dt.datetime.now(), format='%Y-%m-%d %H:%M:%S.%f')   
     # Monta uma mensagem com um carimbo de data/hora e um número de sequência
@@ -26,8 +26,8 @@ for i in range (20):
 
     time.sleep(1)
 
-# Força o envio de todas as mensagens pendentes antes de fechar o produtor.
+# # Força o envio de todas as mensagens pendentes antes de fechar o produtor.
 producer.flush()   
 
-# Fecha a conexão com o produtor
+# # Fecha a conexão com o produtor
 producer.close()

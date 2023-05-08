@@ -5,19 +5,19 @@ import time
 # Cria uma instância de um consumidor Kafka e configura o endereço do servidor de bootstrap e o nome do tópico a ser consumido
 consumer = KafkaConsumer(
     bootstrap_servers=['localhost:9092', 'localhost:9093', 'localhost:9094'],
-    auto_offset_reset='earliest',
-    group_id='1'
+    auto_offset_reset='latest',
+    group_id='A'
 )
 
 # Atribuir a partição e o offset desejados
-tp = TopicPartition('topic_1', 3)  # partição 0 de 'my_topic'
+tp = TopicPartition('topic_2', 0)  # partição 0 de 'my_topic'
 consumer.assign([tp])
-
-
-consumer.seek(tp, 0)  # move para o offset X
 
 current_offset = consumer.position(tp)
 end_offset = consumer.end_offsets([tp])[tp]
+
+consumer.seek(tp, current_offset)  # move para o offset X
+
 
 print(f'current_offset: {current_offset} - end_offset: {end_offset}')
 

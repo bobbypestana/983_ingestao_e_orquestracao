@@ -1,7 +1,7 @@
 from kafka import KafkaConsumer, TopicPartition
 
 
-groups = ['1']
+groups = ['A', 'B', 'C']
 
 for group_id_ in groups:
 

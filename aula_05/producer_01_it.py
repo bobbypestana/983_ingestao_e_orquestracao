@@ -34,12 +34,35 @@ for i in range (10_000):
 
 ## 1. Todos os logs são publicados no modo *fanout*.
 
+    # Define exchange name and route
+    exchange_name_ = 'exchange_fanout'
+    route_ = ''
 
+    # Publish message
+    channel.basic_publish(
+        exchange=exchange_name_,
+        routing_key=route_,
+        body=message
+    )
 
     
 
 ## 2. Todos erros de alta prioridade em aberto são publicados no modo *topic*, rota *department.category.priority.status*.
 
+    if (priority == 'ALTA') & (status == 'ABERTA'):
+        # Define exchange name and route
+        exchange_name_ = 'exchange_topic'
+        route_ = f'{department.lower()}.{category.lower()}.{priority.lower()}.{status.lower()}'
+
+        # Publish message
+        channel.basic_publish(
+            exchange=exchange_name_,
+            routing_key=route_,
+            body=message,
+            properties=pika.BasicProperties(
+                delivery_mode=pika.spec.PERSISTENT_DELIVERY_MODE
+            )
+        )    
 
     print(f" [x] Sent {message}")
     time.sleep(random.randint(0,3))

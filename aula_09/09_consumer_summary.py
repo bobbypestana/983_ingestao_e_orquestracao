@@ -1,11 +1,27 @@
 # Importando as bibliotecas necessárias
 from kafka import KafkaConsumer, TopicPartition
 import json
+from config import KAFKA_BROKERS, TOPICS, CLIENTS, PARTITIONS, GROUPS
 
+# Configurando o consumidor Kafka
+consumer = KafkaConsumer(
+    bootstrap_servers=KAFKA_BROKERS,
+    value_deserializer=lambda v: json.loads(v),  # Deserializando os valores recebidos
+    group_id=GROUPS['results_group']  # Definindo o grupo do consumidor
+)
 
-"""
-SEU CÓDIGO AQUI
-"""
+# Configurando a partição do tópico
+tp = TopicPartition(TOPICS["authorizations"], 0)
+consumer.assign([tp])
+
+# Obtendo o offset atual e o offset final
+current_offset = 0 # consumer.position(tp)
+end_offset = consumer.end_offsets([tp])[tp]
+
+# Buscando o offset atual
+consumer.seek(tp, current_offset)
+
+print("authorization", current_offset, end_offset)
 
 # Definindo a função para contar as transações
 def count_transactions():

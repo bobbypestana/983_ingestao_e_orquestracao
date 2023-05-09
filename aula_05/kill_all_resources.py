@@ -5,45 +5,44 @@ connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost')
 channel = connection.channel()
 
 # Declare a queue to consume messages from
-result = channel.queue_declare(
-    queue='Q1', 
-    durable=True
+result = channel.queue_delete(
+    queue='Q1'
 )
 
 # Declare a queue to consume messages from
-result = channel.queue_declare(
-    queue='Q2_A', 
-    durable=True
+result = channel.queue_delete(
+    queue='Q2_A'
 )
 
 # Declare a queue to consume messages from
-result = channel.queue_declare(
-    queue='Q2_B', 
-    durable=True
+result = channel.queue_delete(
+    queue='Q2_B'
 )
 
 # Declare a queue to consume messages from
-result = channel.queue_declare(
-    queue='Q2_C', 
-    durable=True
+result = channel.queue_delete(
+    queue='Q2_C'
 )
 
 # Declare a queue to consume messages from
-result = channel.queue_declare(
-    queue='Q2_D', 
-    durable=True
+result = channel.queue_delete(
+    queue='Q2_D',
 )
 
 # Declare a queue to consume messages from
-result = channel.queue_declare(
-    queue='Q3', 
-    durable=True
+result = channel.queue_delete(
+    queue='Q3'
 )
 
 # Declare a queue to consume messages from
-result = channel.queue_declare(
-    queue='Q4', 
-    durable=True
+result = channel.queue_delete(
+    queue='Q4'
 )
+
+# Declare a queue to consume messages from
+result = channel.exchange_delete('exchange_topic')
+result = channel.exchange_delete('exchange_direct')
+result = channel.exchange_delete('exchange_fanout')
+
 
 connection.close()
